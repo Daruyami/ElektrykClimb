@@ -28,12 +28,18 @@ let down = false;
 let left = false;
 let right = false;
 
+// Initializacja używanych klawiszy, zapobiega działaniom na NaN
+let keys = {
+    w: false,
+    a: false,
+    s: false,
+    d: false,
+};
 
 let gameLoop = function(){
     handleInputs()
     update()
     render()
-
 }
 
 //funkcja od renderingu
@@ -59,8 +65,10 @@ let update = function(){
 }
 
 let handleInputs = function(){
-    yVector = down-up
-    xVector = right-left
+    yVector = keys.s - keys.w
+    xVector = keys.d - keys.a
+
+    console.log(xVector, yVector)
 
     //normalizacja yVector i xVector,
     //prawdopodobnie później zostanie odrębną funkcją
@@ -71,39 +79,19 @@ let handleInputs = function(){
     }
 }
 
-let inputDown = function(e){
-    if(e.key=='w'){
-        up = true
-    }
-    if(e.key=='s'){
-        down = true
-    }
-    if(e.key=='a'){
-        left = true
-    }
-    if(e.key=='d'){
-        right = true
-    }
+let setupInput = function() {
+    window.addEventListener('keydown', (e) => {
+        keys[e.key] = true;
+    });
 
-}
-let inputUp = function(e){
-    if(e.key=='w'){
-        up = false
-    }
-    if(e.key=='s'){
-        down = false
-    }
-    if(e.key=='a'){
-        left = false
-    }
-    if(e.key=='d'){
-        right = false
-    }
+    window.addEventListener('keyup', (e) => {
+        keys[e.key] = false;
+    });
 }
 
 let init = function(){
-    window.addEventListener('keydown', inputDown)
-    window.addEventListener('keyup', inputUp)
+    // Inicjalizacja obsługi klawiatury
+    setupInput();
 
     //game loop, główna funkcja która powtarzana jest [fps] razy na sekunde
     //osobiście chciałbym to troche inaczej zrobić ale o tym można pomyśleć kiedyindziej
