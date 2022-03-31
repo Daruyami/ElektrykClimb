@@ -68,8 +68,6 @@ let handleInputs = function(){
     yVector = keys.s - keys.w
     xVector = keys.d - keys.a
 
-    console.log(xVector, yVector)
-
     //normalizacja yVector i xVector,
     //prawdopodobnie później zostanie odrębną funkcją
     let m = Math.sqrt(xVector*xVector+yVector*yVector)
