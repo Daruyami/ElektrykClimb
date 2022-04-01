@@ -17,18 +17,13 @@ let xVector = 0
 let yVel = 0
 let xVel = 0
 /*
-    Co do gracza przypuszczam że w późniejszej rozbudowie najlepiej będzie zrobić dla niego klase
-    (co również teoretycznie pozwoliłoby na wielu graczy przy jednym komputerze), dzięki czemu
-    łatwiejsze będzie zarządzanie stanami gracza jak np resetowanie danych zmiennych
-    po śmierci czy rozpoczęciu nowej gry.
+ * Co do gracza przypuszczam że w późniejszej rozbudowie najlepiej będzie zrobić dla niego klase
+ * (co również teoretycznie pozwoliłoby na wielu graczy przy jednym komputerze), dzięki czemu
+ * łatwiejsze będzie zarządzanie stanami gracza jak np resetowanie danych zmiennych
+ * po śmierci czy rozpoczęciu nowej gry.
+ */
 
-*/
-let up = false;
-let down = false;
-let left = false;
-let right = false;
-
-// Initializacja używanych klawiszy, zapobiega działaniom na NaN
+//inicjalizacja używanych klawiszy, zapobiega działaniom na NaN
 let keys = {
     w: false,
     a: false,
@@ -43,17 +38,21 @@ let gameLoop = function(){
 }
 
 //funkcja od renderingu
-//Sposób renderowania (html+css czy canvas czy co) powinien przebywać
-//w tej funkcji i powiązanych, dzięki czemu czegokolwiek chcemy użyć wystarczy zmienić
-//tylko tą część i nic więcej.
-//osobiście uznałem że styl transform: translate z css był najlepszą i najprostrzą opcją
-//...która również pozwala na łatwą rozbudowe później zamieniając translate na matrix
+/*
+ * Sposób renderowania (html+css czy canvas czy co) powinien przebywać
+ * w tej funkcji i powiązanych, dzięki czemu czegokolwiek chcemy użyć wystarczy zmienić
+ * tylko tą część i nic więcej.
+ * osobiście uznałem że styl transform: translate z css był najlepszą i najprostrzą opcją
+ * ...która również pozwala na łatwą rozbudowe później zamieniając translate na matrix
+ */
 let render = function(){
     player.style.transform = "translate("+x+"px, "+y+"px)";
 }
 
 
 let update = function(){
+    //dzielenie przez stałą fps aby zemulować działanie delty
+    //obojętnie ile fpsów, prędkość poruszania powinna być taka sama
     yVel += (pAccel*yVector)/fps
     xVel += (pAccel*xVector)/fps
 
@@ -77,7 +76,7 @@ let handleInputs = function(){
     }
 }
 
-let setupInput = function() {
+let initInput = function() {
     window.addEventListener('keydown', (e) => {
         keys[e.key] = true;
     });
@@ -88,8 +87,8 @@ let setupInput = function() {
 }
 
 let init = function(){
-    // Inicjalizacja obsługi klawiatury
-    setupInput();
+    //inicjalizacja obsługi klawiatury
+    initInput();
 
     //game loop, główna funkcja która powtarzana jest [fps] razy na sekunde
     //osobiście chciałbym to troche inaczej zrobić ale o tym można pomyśleć kiedyindziej
