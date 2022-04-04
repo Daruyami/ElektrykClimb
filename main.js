@@ -31,6 +31,11 @@ let keys = {
     d: false,
 };
 
+let testBox = document.getElementById('testBox')
+tBRect = testBox.getBoundingClientRect();
+console.log(tBRect)
+pRect = player.getBoundingClientRect();
+
 let gameLoop = function(){
     handleInputs()
     update()
@@ -47,6 +52,15 @@ let gameLoop = function(){
  */
 let render = function(){
     player.style.transform = "translate("+x+"px, "+y+"px)";
+    pRect = player.getBoundingClientRect();
+    if (pRect.x < (tBRect.x+tBRect.width) &&
+        (pRect.x+pRect.width) > tBRect.x &&
+        pRect.y < (tBRect.y+tBRect.height) &&
+        (pRect.y+pRect.height) > tBRect.y)
+        testBox.style.backgroundColor = 'lime';
+    else
+        testBox.style.backgroundColor = 'red';
+
 }
 
 
