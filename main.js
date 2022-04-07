@@ -1,6 +1,6 @@
 //ilość fpsów
 let fps = 30
-
+let game
 //inicjalizacja używanych klawiszy, zapobiega działaniom na NaN
 let keys = {
     w: false,
@@ -22,9 +22,15 @@ class Player {
     yVel = 0
     xVel = 0
 
-    constructor(htmlId='p', y=0,x=0, h=10,w=10, kUp='w', kDown='s', kLeft='a', kRight='d'){
+    createPlayerNode(){
+        let node = document.createElement('div')
+        node.textContent = p.length
+        game.appendChild(node)
+        return node
+    }
+    constructor(y=0,x=0, h=10,w=10, kUp='w', kDown='s', kLeft='a', kRight='d'){
         //gracz
-        this.tag = document.getElementById(htmlId)
+        this.tag = this.createPlayerNode()
         //pozycja gracza
         this.y = y
         this.x = x
@@ -110,9 +116,10 @@ let initInput = function() {
     });
 }
 let init = function(){
+    game = document.getElementById('game');
     //inicjalizacja obsługi klawiatury
     initInput();
-    p.push(new Player('p', 200, 200))
+    p.push(new Player(200, 200))
 
     //game loop, główna funkcja która powtarzana jest [fps] razy na sekunde
     //osobiście chciałbym to troche inaczej zrobić ale o tym można pomyśleć kiedyindziej

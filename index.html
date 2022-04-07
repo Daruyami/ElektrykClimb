@@ -2,16 +2,28 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>tlai</title>
+    <title>ElektrykClimb</title>
     <style>
 
-        #p{
-            position:absolute;
+        *{
+            background-color: #151515;
+            color: white;
+            padding: 0px;
+            margin: 0px;
+        }
+
+        #game{
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #game *{
+            position: absolute;
         }
 
         #testBox{
             background-color: red;
-            position:absolute;
+            position: absolute;
             transform: translate(45vw, 45vh);
             width: 5vw;
             height: 5vh;
@@ -20,10 +32,9 @@
     </style>
   </head>
   <body>
-    <div id="p">Andrzej Duda</div>
-
-    <div id="testBox">a</div>
-
+    <div id="game">
+      <div id="testBox">a</div>
+    </div>
     <script src='main.js'></script>
   </body>
 </html>
