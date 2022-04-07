@@ -1,6 +1,15 @@
 //ilość fpsów
 let fps = 30
 
+//inicjalizacja używanych klawiszy, zapobiega działaniom na NaN
+let keys = {
+    w: false,
+    a: false,
+    s: false,
+    d: false,
+};
+
+
 class Player {
     //przyspiesznie gracza
     pAccel = 100
@@ -13,20 +22,26 @@ class Player {
     yVel = 0
     xVel = 0
 
-    constructor(y=0,x=0, h=10,w=10, htmlId='p'){
+    constructor(htmlId='p', y=0,x=0, h=10,w=10, kUp='w', kDown='s', kLeft='a', kRight='d'){
+        //gracz
+        this.tag = document.getElementById(htmlId)
         //pozycja gracza
         this.y = y
         this.x = x
         //rozmiar gracza
         this.h = h
         this.w = w
-        //gracz
-        this.tag = document.getElementById(htmlId)
+        //kontrolki
+        this.kUp = kUp
+        this.kDown = kDown
+        this.kLeft = kLeft
+        this.kRight = kRight
+
     }
 
-    input(){
-        this.yVector = keys.s - keys.w
-        this.xVector = keys.d - keys.a
+    checkInput(){
+        this.yVector = keys[this.kDown] - keys[this.kUp]
+        this.xVector = keys[this.kRight] - keys[this.kLeft]
 
         let vV = normalize(this.yVector, this.xVector)
         this.yVector = vV.yV
@@ -55,30 +70,6 @@ class Player {
 //tablica zawierająca graczy
 let p = []
 
-//urwany kawałek kodu od kolizji
-/*pRect = {p[0].
- i f (pRect.x < (tBRect.x+tBRect.width) &&    *
- (pRect.x+pRect.width) > tBRect.x &&
- pRect.y < (tBRect.y+tBRect.height) &&
- (pRect.y+pRect.height) > tBRect.y)
- testBox.style.backgroundColor = 'lime';
- else
-     testBox.style.backgroundColor = 'red';*/
-//więcej kodu od kolizji
-/*let testBox = document.getElementById('testBox')
-tBRect = testBox.getBoundingClientRect();
-console.log(tBRect)
-pRect = player.getBoundingClientRect();*/
-
-
-//inicjalizacja używanych klawiszy, zapobiega działaniom na NaN
-let keys = {
-    w: false,
-    a: false,
-    s: false,
-    d: false,
-};
-
 
 normalize = function(yV, xV){
     //normalizacja yVector i xVector,
@@ -91,7 +82,7 @@ normalize = function(yV, xV){
 }
 
 let handleInputs = function(){
-    p[0].input()
+    p[0].checkInput()
 }
 
 let update = function(){
@@ -121,7 +112,7 @@ let initInput = function() {
 let init = function(){
     //inicjalizacja obsługi klawiatury
     initInput();
-    p.push(new Player(200, 200))
+    p.push(new Player('p', 200, 200))
 
     //game loop, główna funkcja która powtarzana jest [fps] razy na sekunde
     //osobiście chciałbym to troche inaczej zrobić ale o tym można pomyśleć kiedyindziej
