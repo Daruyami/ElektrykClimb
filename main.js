@@ -1,14 +1,10 @@
 //ilość fpsów
 let fps = 30
 let game
-//inicjalizacja używanych klawiszy, zapobiega działaniom na NaN
-let keys = {
-    w: false,
-    a: false,
-    s: false,
-    d: false,
-};
-
+//tablica zawierająca przyciski
+let keys = []
+//tablica zawierająca graczy
+let p = []
 
 class Player {
     //przyspiesznie gracza
@@ -39,9 +35,13 @@ class Player {
         this.w = w
         //kontrolki
         this.kUp = kUp
+        keys[kUp] = false
         this.kDown = kDown
+        keys[kDown] = false
         this.kLeft = kLeft
+        keys[kLeft] = false
         this.kRight = kRight
+        keys[kRight] = false
 
     }
 
@@ -73,8 +73,6 @@ class Player {
     }
 
 }
-//tablica zawierająca graczy
-let p = []
 
 
 normalize = function(yV, xV){
@@ -88,15 +86,18 @@ normalize = function(yV, xV){
 }
 
 let handleInputs = function(){
-    p[0].checkInput()
+    for(let i=0; i<p.length; i++)
+        p[i].checkInput()
 }
 
 let update = function(){
-    p[0].move()
+    for(let i=0; i<p.length; i++)
+        p[i].move()
 }
 
 let render = function(){
-    p[0].draw()
+    for(let i=0; i<p.length; i++)
+        p[i].draw()
 }
 
 let gameLoop = function(){
