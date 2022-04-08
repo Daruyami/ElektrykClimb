@@ -1,10 +1,11 @@
-//ilość fpsów
-let fps = 30
 let game
 //tablica zawierająca przyciski
 let keys = []
 //tablica zawierająca graczy
 let p = []
+//delta między iteracjami głównej pętli
+let delta = 0
+let prevTimestamp
 
 class Player {
     //przyspiesznie gracza
@@ -55,10 +56,9 @@ class Player {
     }
 
     move(){
-        //dzielenie przez stałą fps aby zemulować działanie delty
-        //obojętnie ile fpsów, prędkość poruszania powinna być taka sama
-        this.yVel += (this.pAccel * this.yVector)/fps
-        this.xVel += (this.pAccel * this.xVector)/fps
+        //obojętnie ile fpsów, prędkość poruszania powinna być taka sama dzięki delcie
+        this.yVel += (this.pAccel * this.yVector)*delta
+        this.xVel += (this.pAccel * this.xVector)*delta
         this.yVel = this.yVel * this.pFrict
         this.xVel = this.xVel * this.pFrict
         //gdzieś tutaj będzie wykrywanie kolizji,
@@ -100,10 +100,13 @@ let render = function(){
         p[i].draw()
 }
 
-let gameLoop = function(){
+let gameLoop = function(timestamp=performance.now()){
+    delta = (timestamp - prevTimestamp)/1000
     handleInputs()
     update()
     render()
+    prevTimestamp = timestamp
+    window.requestAnimationFrame(gameLoop)
 }
 
 
@@ -122,9 +125,9 @@ let init = function(){
     initInput();
     p.push(new Player(200, 200))
 
-    //game loop, główna funkcja która powtarzana jest [fps] razy na sekunde
-    //osobiście chciałbym to troche inaczej zrobić ale o tym można pomyśleć kiedyindziej
-    setInterval(gameLoop,1000/fps)
+    prevTimestamp = performance.now()
+    //game loop, główna pętla gry
+    gameLoop()
 }
 
 window.addEventListener('load',init)
