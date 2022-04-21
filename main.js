@@ -1,21 +1,22 @@
+//game html node
 let game
-//tablica zawierająca przyciski
+//array containing keys
 let keys = []
-//tablica zawierająca graczy
+//array containing players
 let p = []
-//delta między iteracjami głównej pętli
+
 let delta = 0
 let prevTimestamp
 
 class Player {
-    //przyspiesznie gracza
+    //player acceleration
     pAccel = 100
-    //opór/tarcie gracza (utrata prędkości)
+    //player friction
     pFrict = 0.75
-    //wektor (kierunek) poruszania sie gracza
+    //player movement vector
     yVector = 0
     xVector = 0
-    //prędkość poruszania sie gracza
+    //player movement speed
     yVel = 0
     xVel = 0
 
@@ -25,16 +26,7 @@ class Player {
         game.appendChild(node)
         return node
     }
-    constructor(y=0,x=0, h=10,w=10, kUp='w', kDown='s', kLeft='a', kRight='d'){
-        //gracz
-        this.tag = this.createPlayerNode()
-        //pozycja gracza
-        this.y = y
-        this.x = x
-        //rozmiar gracza
-        this.h = h
-        this.w = w
-        //kontrolki
+    initInput(kUp,kDown,kLeft,kRight){
         this.kUp = kUp
         keys[kUp] = false
         this.kDown = kDown
@@ -43,46 +35,55 @@ class Player {
         keys[kLeft] = false
         this.kRight = kRight
         keys[kRight] = false
-
     }
-
+    constructor(y=0,x=0, h=10,w=10, kUp='w', kDown='s', kLeft='a', kRight='d'){
+        //player
+        this.tag = this.createPlayerNode()
+        //player position
+        this.y = y
+        this.x = x
+        //player size
+        this.h = h
+        this.w = w
+        //controls
+        initInput()
+    }
     checkInput(){
-        this.yVector = keys[this.kDown] - keys[this.kUp]
         this.xVector = keys[this.kRight] - keys[this.kLeft]
+        this.yVector = keys[this.kDown] - keys[this.kUp]
 
         let vV = normalize(this.yVector, this.xVector)
-        this.yVector = vV.yV
         this.xVector = vV.xV
+        this.yVector = vV.yV
     }
 
     move(){
-        //obojętnie ile fpsów, prędkość poruszania powinna być taka sama dzięki delcie
-        this.yVel += (this.pAccel * this.yVector)*delta
+        //thanks to delta movement speed shouldnt depend on fps
         this.xVel += (this.pAccel * this.xVector)*delta
-        this.yVel = this.yVel * this.pFrict
+        this.yVel += (this.pAccel * this.yVector)*delta
         this.xVel = this.xVel * this.pFrict
+        this.yVel = this.yVel * this.pFrict
         //gdzieś tutaj będzie wykrywanie kolizji,
         //prawdopodobnie zastąpić te dwie operacje funkcją move()
         //która wykrywałaby kolizje
-        this.y = this.y + this.yVel
         this.x = this.x + this.xVel
+        this.y = this.y + this.yVel
     }
 
-    draw(yD=this.y, xD=this.x, hD=this.h, wD=this.w/*, rot*/){
-        this.tag.style.transform = "translate("+xD+"px, "+yD+"px)";
+    draw(/*xD=this.x, yD=this.y, hD=this.h, wD=this.w, rot*/){
+        this.tag.style.transform = "translate("+this.x+"px, "+this.y+"px)";
     }
 
 }
 
-
-normalize = function(yV, xV){
+normalize = function(xV, yV){
     //normalizacja yVector i xVector,
     let m = Math.sqrt(xV*xV+yV*yV)
     if(m>1){
-        yV=yV/m
         xV=xV/m
+        yV=yV/m
     }
-    return {yV: yV,xV: xV}
+    return {xV: xV,yV: yV}
 }
 
 let handleInputs = function(){
@@ -109,7 +110,6 @@ let gameLoop = function(timestamp=performance.now()){
     window.requestAnimationFrame(gameLoop)
 }
 
-
 let initInput = function() {
     window.addEventListener('keydown', (e) => {
         keys[e.key] = true;
@@ -119,14 +119,14 @@ let initInput = function() {
         keys[e.key] = false;
     });
 }
+
 let init = function(){
     game = document.getElementById('game');
-    //inicjalizacja obsługi klawiatury
     initInput();
     p.push(new Player(200, 200))
 
     prevTimestamp = performance.now()
-    //game loop, główna pętla gry
+    //main game loop
     gameLoop()
 }
 
