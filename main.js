@@ -46,13 +46,13 @@ class Player {
         this.h = h
         this.w = w
         //controls
-        initInput()
+        this.initInput(kUp,kDown,kLeft,kRight)
     }
     checkInput(){
         this.xVector = keys[this.kRight] - keys[this.kLeft]
         this.yVector = keys[this.kDown] - keys[this.kUp]
 
-        let vV = normalize(this.yVector, this.xVector)
+        let vV = normalize(this.xVector, this.yVector)
         this.xVector = vV.xV
         this.yVector = vV.yV
     }
